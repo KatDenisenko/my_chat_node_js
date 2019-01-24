@@ -83,8 +83,8 @@ toggleLoginRegistration = () => {
   }))
 }
 
- userOnlineFunc = (userName)=> {
-  window.socket.emit("user-online", (userName));
+ userOnlineFunc = (userEmail)=> {
+  window.socket.emit("add_online", (userEmail));
  }
 
   handlerChange=(e)=> {
@@ -148,18 +148,19 @@ toggleLoginRegistration = () => {
           users:[ message.currentUser.username, ...prev.users],
           onlineUsers:[message.currentUser.username,...prev.onlineUsers]
         }))
-        this.userOnlineFunc(message.currentUser.username)
+        this.userOnlineFunc(message.currentUser.email)
 
       }
         console.log('register-on-DB', message);
       });
 
-      window.socket.on("userAddedOnline", (userName) => {
-        console.log(userName)
+     
+      window.socket.on("online_users", (userOnline) => {
+        console.log(userOnline)
 
-        this.setState(prev=>({
-          onlineUsers: [...prev.onlineUsers, userName]
-        }))
+        this.setState({
+          onlineUsers: userOnline
+        })
         
     });
   
@@ -174,9 +175,9 @@ toggleLoginRegistration = () => {
           currentUser:message.currentUser,
           userName: message.currentUser.username,
           modal: false,
-          onlineUsers:[message.currentUser.username,...prev.onlineUsers],
+          //onlineUsers:[message.currentUser.username,...prev.onlineUsers],
         }))
-        this.userOnlineFunc(message.currentUser.username)
+        this.userOnlineFunc(message.currentUser.email)
       }
         console.log(message);
       });

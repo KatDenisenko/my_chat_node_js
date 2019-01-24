@@ -27,12 +27,11 @@ function checkAuth (client, next) {
 
 
 let online = 0;
+let userOnline=[];
 
 module.exports = io => {
 io.on('connection', (client) => {
 
-   
-     
         client.on('new-user', (user) => {
             let allMessages = messageSchem.find().lean();// избавляемся от лишней информации, которая к нам приходит
     const allUsers = User.find();
@@ -58,7 +57,10 @@ io.on('connection', (client) => {
 
     //client.join('general')
     
-   
+   client.on('add_online',userEmail=>{
+    userOnline.push(userEmail)
+    client.broadcast.emit("online_users", userOnline);
+   })
 
 
 
@@ -126,6 +128,7 @@ io.on('connection', (client) => {
 
     client.on("disconnect", () => {
         console.log(--online);
+
         client.broadcast.emit("change-online", online);
     });
     client.on("message", (message) => {
