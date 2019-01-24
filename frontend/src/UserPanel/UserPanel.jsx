@@ -36,9 +36,9 @@ const UserPanel = ({allUsers, currentUser, users, onlineUsers}) => {
                 <Image avatar src='/images/avatar/small/daniel.jpg' />
                 <List.Content>
                     <List.Header as='a'>{el.username}</List.Header>
-                    {onlineUsers.map(el=>el===el.username?
+                    {onlineUsers.includes(el.username)?
                     <Icon name='eye'/>:
-                    <Icon name='eye slash'/>)
+                    <Icon name='eye slash'/>
                     }
                 </List.Content>
                 </List.Item>
