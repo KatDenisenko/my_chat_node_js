@@ -21,7 +21,7 @@ const UserPanel = ({allUsers, currentUser, users, onlineUsers}) => {
                 </List.Item>
 
                 <List.Item >
-                <List.Content divided verticalAlign='end'>
+                <List.Content>
                     <List.Header as='a'>#another channel</List.Header>                   
                 </List.Content>
                 </List.Item>

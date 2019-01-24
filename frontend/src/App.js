@@ -31,16 +31,16 @@ class App extends Component {
     error:''
   }
 
-  uniqueNames=(arr)=> {
-    let  obj = {};
-      for (let i = 0; i < arr.length; i++) {
-      let str = arr[i].author;
-      obj[str] = true; // запомнить строку в виде свойства объекта
-    }
-    let result = [...Object.keys(obj)];
+  // uniqueNames=(arr)=> {
+  //   let  obj = {};
+  //     for (let i = 0; i < arr.length; i++) {
+  //     let str = arr[i].author;
+  //     obj[str] = true; // запомнить строку в виде свойства объекта
+  //   }
+  //   let result = [...Object.keys(obj)];
 
-     return result;
-  }
+  //    return result;
+  // }
   
   registrationSubmit =()=>{
     let obj={
@@ -62,7 +62,7 @@ class App extends Component {
 
   toggleModal = () => {
     let obj={
-      username: this.state.userName,
+      //username: this.state.userName,
       password:this.state.password,
       email:this.state.email,
     }
@@ -96,12 +96,15 @@ toggleLoginRegistration = () => {
     })}
 
     componentWillMount(){
+
+      window.socket.emit('new-user')
+
       window.socket.on("All-message", (docs) => {
          console.log(docs)
         let arr = [...docs]
         this.setState ({
             messages: arr,
-            users: this.uniqueNames(arr),
+            //users: this.uniqueNames(arr),
             loader: false,
         })
         
@@ -116,21 +119,21 @@ toggleLoginRegistration = () => {
     // let user = {
     //   data: 'succsess',
     // }
-    // window.socket.emit('new-user', user)
+   
 
     // console.log('aaaaaaaaaaaaaa1')
    
     }
 
-    componentDidUpdate(){
-      window.socket.on("userAddedOnline", (userName) => {
-        console.log(userName)
-        this.setState(prev=>({
-          onlineUsers: [...prev.onlineUsers, userName]
-        }))
+    // componentDidUpdate(){
+    //   window.socket.on("userAddedOnline", (userName) => {
+    //     console.log(userName)
+    //     this.setState(prev=>({
+    //       onlineUsers: [...prev.onlineUsers, userName]
+    //     }))
         
-    });
-    }
+    // });
+    // }
 
     componentDidMount(){
       window.socket.on('register-on-DB', (message) => {
@@ -142,14 +145,23 @@ toggleLoginRegistration = () => {
           currentUser:message.currentUser,
           userName: message.currentUser.username,
           modalRegistration:false,
-          users:[ this.state.userName, ...prev.users],
-          onlineUsers:[this.state.userName,...prev.onlineUsers]
+          users:[ message.currentUser.username, ...prev.users],
+          onlineUsers:[message.currentUser.username,...prev.onlineUsers]
         }))
-        this.userOnlineFunc(this.state.userName)
+        this.userOnlineFunc(message.currentUser.username)
 
       }
         console.log('register-on-DB', message);
       });
+
+      window.socket.on("userAddedOnline", (userName) => {
+        console.log(userName)
+
+        this.setState(prev=>({
+          onlineUsers: [...prev.onlineUsers, userName]
+        }))
+        
+    });
   
 
       window.socket.on('login-done', (message) => {
@@ -162,14 +174,16 @@ toggleLoginRegistration = () => {
           currentUser:message.currentUser,
           userName: message.currentUser.username,
           modal: false,
-          onlineUsers:[this.state.userName,...prev.onlineUsers],
+          onlineUsers:[message.currentUser.username,...prev.onlineUsers],
         }))
-        this.userOnlineFunc(this.state.userName)
+        this.userOnlineFunc(message.currentUser.username)
       }
         console.log(message);
       });
       
     }
+
+    
 
     // componentWillUnmount(){
     //   window.socket.emit('disconnect')
@@ -178,7 +192,7 @@ toggleLoginRegistration = () => {
 
 
   render() {
-    console.log(this.uniqueNames(this.state.messages));
+   // console.log(this.uniqueNames(this.state.messages));
     console.log(this.state.onlineUsers)//this.uniqueNames(this.state.messages)
     return (
       <div className="App">

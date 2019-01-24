@@ -30,9 +30,13 @@ let online = 0;
 
 module.exports = io => {
 io.on('connection', (client) => {
-    //client.join('general')
-    let allMessages = messageSchem.find().sort({Addat: 1}).limit(10).lean();//избавляемся от лишней информации, которая к нам приходит
+
+   
+     
+        client.on('new-user', (user) => {
+            let allMessages = messageSchem.find().lean();// избавляемся от лишней информации, которая к нам приходит
     const allUsers = User.find();
+
             allMessages.exec(function(err,docs){//.sort('-time').limit(10).
                     if(err) throw err;
                     console.log('Send message from DB');
@@ -49,7 +53,16 @@ io.on('connection', (client) => {
     
     console.log(++online);
     client.broadcast.emit("change-online", online);
+        })
+
+
+    //client.join('general')
+    
    
+
+
+
+
     client.on('register',async(user) => {
         try {
             let userDB = await User.findOne({email: user.email}).lean().exec();
