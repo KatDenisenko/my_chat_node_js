@@ -74,11 +74,14 @@ class Chat extends Component {
             input:'',
             newMessage:true,
         }))
-
         window.socket.emit("editMessage", editMessage.messId, editMessage); 
-        
     }
 
+    handleKeyDown =(e)=>{
+        if(e.keyCode===13) {
+            this.state.newMessage?this.recMessage():this.editContent()
+        }
+    }
     componentDidMount(){
 
      
@@ -181,6 +184,7 @@ class Chat extends Component {
                     label={<Button icon='add'/>}
                     labelPosition='left'
                     placeholder='Write your message'
+                    onKeyDown={this.handleKeyDown}
                     value = {this.state.input}
                     onChange = {this.hanlerChange}
                    />
