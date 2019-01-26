@@ -58,7 +58,8 @@ io.on('connection', (client) => {
     //client.join('general')
     
    client.on('add_online',userEmail=>{
-    userOnline.push(userEmail)
+    console.log(userOnline.push(userEmail));
+   
     client.broadcast.emit("online_users", userOnline);
    })
 

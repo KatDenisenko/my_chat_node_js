@@ -4,7 +4,7 @@ import moment from 'moment';
 import socket from "socket.io-client";
 // import axios from "axios";
 import uuidv4 from 'uuid/v4';
-
+import md5 from 'md5';
 
 
 window.socket = socket(window.location.origin, {
@@ -148,7 +148,7 @@ class Chat extends Component {
              {this.state.messages.map(el=>
                
                 <Comment key = {el.messId}>
-                    <Comment.Avatar src='../images/sheep.jpg'/>
+                    <Comment.Avatar src={`http://gravatar.com/avatar/${md5(`${el.author}`)}?d=identicon`}/>
                     <Comment.Content>
                         <Comment.Author as='a'>
                             {el.author}

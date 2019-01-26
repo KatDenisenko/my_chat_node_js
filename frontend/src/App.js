@@ -28,7 +28,8 @@ class App extends Component {
     allUsers:[],
     loader:true,
     onlineUsers: [],
-    error:''
+    error:'',
+    searchUser:'',
   }
 
   // uniqueNames=(arr)=> {
@@ -136,6 +137,7 @@ toggleLoginRegistration = () => {
     // }
 
     componentDidMount(){
+
       window.socket.on('register-on-DB', (message) => {
         if (!message.currentUser) {
           this.setState(
@@ -148,14 +150,14 @@ toggleLoginRegistration = () => {
           users:[ message.currentUser.username, ...prev.users],
           onlineUsers:[message.currentUser.username,...prev.onlineUsers]
         }))
-        this.userOnlineFunc(message.currentUser.email)
+        //this.userOnlineFunc(message.currentUser.email)
 
       }
         console.log('register-on-DB', message);
       });
 
      
-      window.socket.on("online_users", (userOnline) => {
+      window.socket.on('online_users', (userOnline) => {
         console.log(userOnline)
 
         this.setState({
@@ -177,7 +179,7 @@ toggleLoginRegistration = () => {
           modal: false,
           //onlineUsers:[message.currentUser.username,...prev.onlineUsers],
         }))
-        this.userOnlineFunc(message.currentUser.email)
+        //this.userOnlineFunc(message.currentUser.email)
       }
         console.log(message);
       });
@@ -205,7 +207,7 @@ toggleLoginRegistration = () => {
         {/* <UserPanel users = {this.state.users}/> */}
         {this.state.loader?<p>Loading....</p>:
         <div className = 'chartWrapper'>
-        <UserPanel allUsers = {this.state.allUsers} currentUser = {this.state.userName} users = {this.state.users} onlineUsers = {this.state.onlineUsers}/>
+        <UserPanel handlerChange={this.handlerChange} searchUser = {this.state.searchUser} allUsers = {this.state.allUsers} currentUser = {this.state.userName} users = {this.state.users} onlineUsers = {this.state.onlineUsers}/>
         <Chat messages = {this.state.messages} userName = {this.state.userName}/>
         </div>}
         </div>}
